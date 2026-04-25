@@ -1,6 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { Navigate, Route, Routes, useLocation } from "react-router-dom";
-
 import Footer from "./components/Footer.jsx";
 import Navbar from "./components/Navbar.jsx";
 import ChatbotPage from "./pages/ChatbotPage.jsx";
@@ -9,7 +8,7 @@ import ErrorDetectionPage from "./pages/ErrorDetectionPage.jsx";
 import FormGuidePage from "./pages/FormGuidePage.jsx";
 import JobsPage from "./pages/JobsPage.jsx";
 import RejectionPredictorPage from "./pages/RejectionPredictorPage.jsx";
-import SignupPage from "./pages/SignupPage.jsx";
+// import SignupPage removed
 import SituationSolutionPage from "./pages/SituationSolutionPage.jsx";
 import SuggestionsPage from "./pages/SuggestionsPage.jsx";
 
@@ -17,28 +16,15 @@ function App() {
   const location = useLocation();
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-slate-950 text-slate-100">
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute -left-28 top-16 h-[26rem] w-[26rem] rounded-full bg-blue-600/30 blur-[110px]"
-        animate={{ scale: [1, 1.03, 1], opacity: [0.9, 1, 0.9], x: [0, 20, 0], y: [0, -16, 0] }}
-        transition={{ duration: 5.5, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute right-0 top-10 h-[30rem] w-[30rem] rounded-full bg-indigo-500/30 blur-[120px]"
-        animate={{ scale: [1, 1.03, 1], opacity: [0.88, 1, 0.88], x: [0, -25, 0], y: [0, 18, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        aria-hidden="true"
-        className="pointer-events-none absolute bottom-0 left-1/3 h-[22rem] w-[22rem] rounded-full bg-cyan-400/20 blur-[90px]"
-        animate={{ scale: [1, 1.03, 1], opacity: [0.85, 1, 0.85], x: [0, 18, 0], y: [0, -18, 0] }}
-        transition={{ duration: 4.8, repeat: Infinity, ease: "easeInOut" }}
-      />
+    <div className="app-root">
+      <div className="bg-blobs">
+        <div className="blob blob-1" />
+        <div className="blob blob-2" />
+        <div className="blob blob-3" />
+      </div>
 
       <Navbar />
-      <main className="relative mx-auto w-full max-w-7xl px-4 pb-10 pt-6 sm:px-6 lg:px-8">
+      <main className="page-shell">
         <AnimatePresence mode="wait">
           <motion.div
             key={location.pathname}
@@ -54,7 +40,7 @@ function App() {
               <Route path="/rejection-predictor" element={<RejectionPredictorPage />} />
               <Route path="/suggestions" element={<SuggestionsPage />} />
               <Route path="/error-detection" element={<ErrorDetectionPage />} />
-              <Route path="/signup" element={<SignupPage />} />
+              {/* SignupPage route removed */}
               <Route path="/jobs" element={<JobsPage />} />
               <Route path="/chatbot" element={<ChatbotPage />} />
               <Route path="*" element={<Navigate to="/" replace />} />

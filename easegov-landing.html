@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>EaseGov – Simplify Government Processes with AI</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #07122b;
+    --deep:    #0b1e40;
+    --mid:     #0f2959;
+    --blue:    #1351a8;
+    --accent:  #3a82f7;
+    --bright:  #60aaff;
+    --teal:    #38c5d4;
+    --white:   #ffffff;
+    --muted:   rgba(255,255,255,0.55);
+    --card-bg: rgba(255,255,255,0.045);
+    --card-border: rgba(255,255,255,0.09);
+    --radius:  18px;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ── NOISE TEXTURE OVERLAY ── */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── BACKGROUND BLOBS ── */
+  .bg-blobs {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .blob {
+    position: absolute; border-radius: 50%; filter: blur(90px);
+    animation: blobFloat 12s ease-in-out infinite alternate;
+  }
+  .blob-1 { width: 600px; height: 600px; top: -200px; left: -150px; background: radial-gradient(circle, rgba(19,81,168,0.45) 0%, transparent 70%); animation-delay: 0s; }
+  .blob-2 { width: 500px; height: 500px; top: 30%; right: -100px; background: radial-gradient(circle, rgba(56,197,212,0.22) 0%, transparent 70%); animation-delay: -4s; }
+  .blob-3 { width: 400px; height: 400px; bottom: -100px; left: 30%; background: radial-gradient(circle, rgba(58,130,247,0.28) 0%, transparent 70%); animation-delay: -8s; }
+  @keyframes blobFloat { from { transform: translate(0,0) scale(1); } to { transform: translate(30px,40px) scale(1.08); } }
+
+  /* ── NAVBAR ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 5%;
+    height: 70px;
+    background: rgba(7,18,43,0.75);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--card-border);
+    animation: slideDown .6s ease both;
+  }
+  @keyframes slideDown { from { opacity:0; transform:translateY(-20px); } to { opacity:1; transform:none; } }
+
+  .logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.25rem;
+    text-decoration: none; color: var(--white);
+  }
+  .logo-icon {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: linear-gradient(135deg, var(--accent), var(--teal));
+    display: grid; place-items: center;
+    font-weight: 800; font-size: .95rem; color: #fff;
+    box-shadow: 0 0 20px rgba(58,130,247,0.45);
+  }
+
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: .9rem; font-weight: 500;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+
+  .nav-cta {
+    background: linear-gradient(135deg, var(--accent), #2563eb);
+    color: #fff; border: none; padding: 10px 24px;
+    border-radius: 50px; font-size: .88rem; font-weight: 600;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    box-shadow: 0 4px 20px rgba(58,130,247,0.4);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .nav-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(58,130,247,0.55); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 120px 5% 80px;
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(58,130,247,0.12);
+    border: 1px solid rgba(58,130,247,0.3);
+    border-radius: 50px; padding: 6px 18px;
+    font-size: .8rem; font-weight: 500; color: var(--bright);
+    margin-bottom: 30px;
+    animation: fadeUp .8s .2s ease both;
+  }
+  .badge-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--teal); animation: pulse 2s infinite; }
+  @keyframes pulse { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:.4;transform:scale(1.5);} }
+
+  .hero h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(2.6rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    max-width: 780px;
+    animation: fadeUp .8s .35s ease both;
+  }
+  .hero h1 .gradient-text {
+    background: linear-gradient(90deg, var(--bright) 0%, var(--teal) 100%);
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+
+  .hero p {
+    margin-top: 22px;
+    font-size: clamp(.95rem, 2vw, 1.15rem);
+    color: var(--muted);
+    max-width: 560px;
+    line-height: 1.7;
+    animation: fadeUp .8s .5s ease both;
+  }
+
+  .hero-btns {
+    display: flex; gap: 16px; margin-top: 40px; flex-wrap: wrap; justify-content: center;
+    animation: fadeUp .8s .65s ease both;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent) 0%, #1d4ed8 100%);
+    color: #fff; border: none; padding: 14px 32px;
+    border-radius: 50px; font-size: 1rem; font-weight: 600;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    box-shadow: 0 6px 24px rgba(58,130,247,0.45);
+    transition: transform .2s, box-shadow .2s;
+  }
+  .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 12px 36px rgba(58,130,247,0.6); }
+
+  .btn-ghost {
+    background: transparent;
+    color: var(--white); border: 1.5px solid var(--card-border);
+    padding: 14px 32px; border-radius: 50px; font-size: 1rem; font-weight: 500;
+    cursor: pointer; font-family: 'DM Sans', sans-serif;
+    display: flex; align-items: center; gap: 8px;
+    transition: border-color .2s, background .2s;
+  }
+  .btn-ghost:hover { border-color: rgba(255,255,255,0.3); background: rgba(255,255,255,0.05); }
+
+  /* hero card preview */
+  .hero-preview {
+    margin-top: 70px;
+    position: relative;
+    width: 100%; max-width: 900px;
+    animation: fadeUp .8s .8s ease both;
+  }
+  .preview-card {
+    background: rgba(11,30,64,0.8);
+    border: 1px solid var(--card-border);
+    border-radius: 20px;
+    padding: 28px 32px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(58,130,247,0.08);
+  }
+  .preview-bar {
+    display: flex; align-items: center; gap: 8px; margin-bottom: 20px;
+  }
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #ff5f57; }
+  .dot-y { background: #febc2e; }
+  .dot-g { background: #28c840; }
+  .preview-pills { display: flex; gap: 10px; flex-wrap: wrap; }
+  .pill {
+    background: rgba(58,130,247,0.12); border: 1px solid rgba(58,130,247,0.2);
+    border-radius: 50px; padding: 6px 16px;
+    font-size: .8rem; color: var(--bright); font-weight: 500;
+  }
+  .pill.active { background: var(--accent); color: #fff; border-color: transparent; }
+
+  @keyframes fadeUp { from { opacity:0; transform:translateY(30px); } to { opacity:1; transform:none; } }
+
+  /* ── SECTION WRAPPER ── */
+  section { position: relative; z-index: 1; padding: 100px 5%; }
+
+  .section-label {
+    display: inline-block;
+    font-size: .78rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--teal); margin-bottom: 14px;
+  }
+  .section-title {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 700; letter-spacing: -.02em;
+    line-height: 1.2;
+  }
+  .section-sub {
+    margin-top: 14px; color: var(--muted);
+    font-size: 1rem; line-height: 1.7; max-width: 500px;
+  }
+  .section-header { text-align: center; margin-bottom: 60px; }
+  .section-header .section-sub { margin-left: auto; margin-right: auto; }
+
+  /* ── FEATURES GRID ── */
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 20px;
+  }
+  .feat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius);
+    padding: 30px;
+    position: relative; overflow: hidden;
+    transition: transform .3s, border-color .3s, box-shadow .3s;
+    cursor: pointer;
+  }
+  .feat-card::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(58,130,247,0.07) 0%, transparent 60%);
+    opacity: 0; transition: opacity .3s;
+  }
+  .feat-card:hover { transform: translateY(-6px); border-color: rgba(58,130,247,0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.3), 0 0 30px rgba(58,130,247,0.1); }
+  .feat-card:hover::before { opacity: 1; }
+
+  .feat-tag {
+    display: inline-block; font-size: .68rem; font-weight: 700;
+    letter-spacing: .1em; text-transform: uppercase;
+    padding: 3px 10px; border-radius: 50px;
+    background: rgba(58,130,247,0.15); color: var(--bright);
+    margin-bottom: 20px;
+  }
+  .feat-tag.teal { background: rgba(56,197,212,0.15); color: var(--teal); }
+  .feat-tag.orange { background: rgba(251,146,60,0.15); color: #fb923c; }
+  .feat-tag.green { background: rgba(52,211,153,0.15); color: #34d399; }
+
+  .feat-icon {
+    width: 50px; height: 50px; border-radius: 14px;
+    display: grid; place-items: center; margin-bottom: 18px;
+    font-size: 1.4rem;
+    background: linear-gradient(135deg, rgba(58,130,247,0.2), rgba(56,197,212,0.1));
+    border: 1px solid rgba(58,130,247,0.2);
+  }
+  .feat-card h3 {
+    font-family: 'Sora', sans-serif; font-size: 1.05rem; font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .feat-card p { font-size: .88rem; color: var(--muted); line-height: 1.65; }
+
+  /* thumbnail image area */
+  .feat-thumb {
+    height: 120px; border-radius: 10px; overflow: hidden;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--mid), var(--deep));
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .feat-thumb .thumb-icon { font-size: 2.5rem; opacity: .5; }
+  .feat-thumb::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(to bottom, transparent 40%, rgba(7,18,43,.7));
+  }
+
+  /* ── DASHBOARD PREVIEW SECTION ── */
+  .dashboard-section {
+    background: linear-gradient(180deg, transparent, rgba(19,81,168,0.08), transparent);
+  }
+  .dashboard-inner {
+    display: flex; gap: 60px; align-items: center; flex-wrap: wrap;
+  }
+  .dashboard-text { flex: 1; min-width: 280px; }
+  .dashboard-visual {
+    flex: 1.4; min-width: 300px;
+    background: rgba(11,30,64,.85);
+    border: 1px solid var(--card-border);
+    border-radius: 20px; overflow: hidden;
+    box-shadow: 0 30px 80px rgba(0,0,0,.5);
+  }
+  .dv-header {
+    padding: 14px 18px;
+    background: rgba(255,255,255,0.035);
+    border-bottom: 1px solid var(--card-border);
+    display: flex; align-items: center; gap: 16px;
+  }
+  .dv-title { font-size: .78rem; font-weight: 600; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+  .dv-body { padding: 24px; }
+  .dv-hero-text {
+    font-family: 'Sora', sans-serif; font-size: 1.6rem; font-weight: 700;
+    line-height: 1.25; margin-bottom: 12px;
+  }
+  .dv-hero-text .g { background: linear-gradient(90deg, var(--bright), var(--teal)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .dv-desc { font-size: .82rem; color: var(--muted); line-height: 1.65; margin-bottom: 20px; }
+  .dv-mini-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .dv-mini {
+    background: rgba(58,130,247,0.08); border: 1px solid rgba(58,130,247,0.15);
+    border-radius: 12px; padding: 14px;
+  }
+  .dv-mini-icon { font-size: 1.1rem; margin-bottom: 6px; }
+  .dv-mini-label { font-size: .72rem; font-weight: 600; color: var(--bright); }
+  .dv-mini-desc { font-size: .7rem; color: var(--muted); margin-top: 2px; }
+
+  /* ── STATS ── */
+  .stats-section { padding: 70px 5%; }
+  .stats-box {
+    background: rgba(19,81,168,0.12);
+    border: 1px solid rgba(58,130,247,0.18);
+    border-radius: 24px;
+    padding: 60px 40px;
+    display: grid; grid-template-columns: repeat(3,1fr);
+    gap: 20px; text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .stats-box::before {
+    content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
+    width: 500px; height: 300px;
+    background: radial-gradient(ellipse, rgba(58,130,247,0.18) 0%, transparent 70%);
+  }
+  .stat { position: relative; }
+  .stat-num {
+    font-family: 'Sora', sans-serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800;
+    background: linear-gradient(90deg, var(--white), var(--bright));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .stat-label { font-size: .88rem; color: var(--muted); margin-top: 6px; font-weight: 500; }
+  .stat-divider { width: 1px; background: var(--card-border); }
+
+  /* ── HOW IT WORKS ── */
+  .steps { display: flex; flex-direction: column; gap: 0; max-width: 700px; margin: 0 auto; }
+  .step { display: flex; gap: 28px; padding: 32px 0; position: relative; }
+  .step:not(:last-child)::after {
+    content: ''; position: absolute; left: 22px; top: 70px;
+    width: 2px; bottom: 0;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+  .step-num {
+    width: 46px; height: 46px; flex-shrink: 0;
+    border-radius: 50%; border: 2px solid var(--accent);
+    display: grid; place-items: center;
+    font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1rem; color: var(--bright);
+    background: rgba(58,130,247,0.1);
+    position: relative; z-index: 1;
+  }
+  .step-content h4 { font-family: 'Sora',sans-serif; font-size: 1.05rem; font-weight: 600; margin-bottom: 6px; }
+  .step-content p { font-size: .88rem; color: var(--muted); line-height: 1.65; }
+
+  /* ── FOOTER ── */
+  footer {
+    position: relative; z-index: 1;
+    border-top: 1px solid var(--card-border);
+    padding: 40px 5%;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: gap;
+    gap: 20px;
+  }
+  .footer-logo {
+    display: flex; align-items: center; gap: 10px;
+    font-family: 'Sora',sans-serif; font-weight: 700; font-size: 1.1rem;
+  }
+  .footer-tagline { font-size: .82rem; color: var(--muted); }
+  .footer-copy { font-size: .78rem; color: var(--muted); }
+  .protected-badge {
+    display: flex; align-items: center; gap: 6px;
+    background: rgba(52,211,153,0.1); border: 1px solid rgba(52,211,153,0.2);
+    border-radius: 50px; padding: 5px 14px;
+    font-size: .75rem; font-weight: 600; color: #34d399;
+  }
+
+  /* ── SCROLL ANIMATIONS ── */
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+  .reveal-delay-1 { transition-delay: .1s; }
+  .reveal-delay-2 { transition-delay: .2s; }
+  .reveal-delay-3 { transition-delay: .3s; }
+  .reveal-delay-4 { transition-delay: .4s; }
+  .reveal-delay-5 { transition-delay: .5s; }
+  .reveal-delay-6 { transition-delay: .6s; }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .stats-box { grid-template-columns: 1fr; }
+    .stat-divider { display: none; }
+    .dashboard-inner { flex-direction: column; }
+    .dv-mini-cards { grid-template-columns: 1fr; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">E</div>
+    EaseGov
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#features">Features</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#">About</a></li>
+  </ul>
+  <button class="nav-cta">Sign In</button>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    Elder-friendly AI government help · Built for India
+  </div>
+  <h1>Simplify Government<br>Processes <span class="gradient-text">with AI</span></h1>
+  <p>Navigate complex bureaucracy effortlessly. EaseGov uses AI to guide you through government services, forms, and applications — making everything simple, clear, and accessible for everyone.</p>
+  <div class="hero-btns">
+    <button class="btn-primary">Get Started Free →</button>
+    <button class="btn-ghost">▶ Watch Demo</button>
+  </div>
+
+  <div class="hero-preview">
+    <div class="preview-card">
+      <div class="preview-bar">
+        <span class="dot dot-r"></span>
+        <span class="dot dot-y"></span>
+        <span class="dot dot-g"></span>
+        <span style="margin-left:auto; font-size:.72rem; color:var(--muted);">EASEGOV PLATFORM · localhost:5173</span>
+      </div>
+      <div class="preview-pills">
+        <span class="pill active">Dashboard</span>
+        <span class="pill">EaseGov AI</span>
+        <span class="pill">Gov Jobs</span>
+        <span class="pill">Profile</span>
+        <span class="pill">Guided Form Filling</span>
+        <span class="pill">Rejection Predictor</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+  <div class="section-header reveal">
+    <span class="section-label">Powerful Features</span>
+    <h2 class="section-title">Everything you need to navigate<br>government processes with confidence</h2>
+    <p class="section-sub">Pick any tool and get started — each one is designed to make government work faster, safer, and easier.</p>
+  </div>
+
+  <div class="features-grid">
+    <div class="feat-card reveal reveal-delay-1">
+      <span class="feat-tag">Most Used · Fast Help</span>
+      <div class="feat-thumb"><span class="thumb-icon">💡</span></div>
+      <h3>Situation → Solution</h3>
+      <p>Share your real-life issue and receive a clear, practical, and simplified action plan tailored to your situation.</p>
+    </div>
+    <div class="feat-card reveal reveal-delay-2">
+      <span class="feat-tag teal">Step-by-Step · Guided</span>
+      <div class="feat-thumb"><span class="thumb-icon">📋</span></div>
+      <h3>Guided Form Filling</h3>
+      <p>Fill difficult forms confidently with step-by-step instructions for every section — no more confusion.</p>
+    </div>
+    <div class="feat-card reveal reveal-delay-3">
+      <span class="feat-tag orange">Risk Check · Safety</span>
+      <div class="feat-thumb"><span class="thumb-icon">🛡️</span></div>
+      <h3>Rejection Predictor</h3>
+      <p>Detect possible rejection risks early and improve your submission before applying. AI-powered analysis.</p>
+    </div>
+    <div class="feat-card reveal reveal-delay-4">
+      <span class="feat-tag">AI Improvements · Upgrade</span>
+      <div class="feat-thumb"><span class="thumb-icon">✨</span></div>
+      <h3>Smart Suggestions</h3>
+      <p>Upgrade your answers with better alternatives, smarter wording, and stronger clarity instantly.</p>
+    </div>
+    <div class="feat-card reveal reveal-delay-5">
+      <span class="feat-tag green">Auto Validation · Detect</span>
+      <div class="feat-thumb"><span class="thumb-icon">🔍</span></div>
+      <h3>Error Detection</h3>
+      <p>Automatically spot missing fields, wrong formats, and validation mistakes instantly before submission.</p>
+    </div>
+    <div class="feat-card reveal reveal-delay-6">
+      <span class="feat-tag teal">Career Support · Opportunity</span>
+      <div class="feat-thumb"><span class="thumb-icon">💼</span></div>
+      <h3>Government Jobs</h3>
+      <p>Explore curated government opportunities with clear eligibility criteria and quick apply links.</p>
+    </div>
+    <div class="feat-card reveal reveal-delay-1" style="grid-column: span 1;">
+      <span class="feat-tag" style="background:rgba(167,139,250,0.15);color:#a78bfa;">Advanced AI · Smart AI</span>
+      <div class="feat-thumb"><span class="thumb-icon">🤖</span></div>
+      <h3>EaseGov AI</h3>
+      <p>Chat with AI, upload images/PDFs, and get easy guidance in one powerful assistant — 24/7 support.</p>
+    </div>
+  </div>
+</section>
+
+<!-- DASHBOARD PREVIEW -->
+<section class="dashboard-section" id="dashboard">
+  <div class="dashboard-inner">
+    <div class="dashboard-text reveal">
+      <span class="section-label">Dashboard</span>
+      <h2 class="section-title">From confusion<br>to <span style="background:linear-gradient(90deg,var(--bright),var(--teal));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">approval</span></h2>
+      <p class="section-sub">EaseGov stands with you at every stage, helping you move from confusion to clarity. With supportive AI guidance, you can confidently complete forms, avoid common mistakes, and make steady progress toward your goals.</p>
+      <button class="btn-primary" style="margin-top:30px;">Open Dashboard →</button>
+    </div>
+    <div class="dashboard-visual reveal reveal-delay-2">
+      <div class="dv-header">
+        <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+        <span class="dv-title" style="margin-left:8px;">EASEGOV DASHBOARD</span>
+      </div>
+      <div class="dv-body">
+        <div class="dv-hero-text">From confusion<br>to <span class="g">approval</span></div>
+        <div class="dv-desc">Start with any feature and take your next step with confidence — your success is possible, and we are here to help you achieve it.</div>
+        <div class="dv-mini-cards">
+          <div class="dv-mini">
+            <div class="dv-mini-icon">💡</div>
+            <div class="dv-mini-label">Situation → Solution</div>
+            <div class="dv-mini-desc">Get a clear action plan fast</div>
+          </div>
+          <div class="dv-mini">
+            <div class="dv-mini-icon">📋</div>
+            <div class="dv-mini-label">Form Filling</div>
+            <div class="dv-mini-desc">Step-by-step guided help</div>
+          </div>
+          <div class="dv-mini">
+            <div class="dv-mini-icon">🛡️</div>
+            <div class="dv-mini-label">Rejection Predictor</div>
+            <div class="dv-mini-desc">Catch errors before submitting</div>
+          </div>
+          <div class="dv-mini">
+            <div class="dv-mini-icon">🤖</div>
+            <div class="dv-mini-label">EaseGov AI</div>
+            <div class="dv-mini-desc">Chat + PDF upload support</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how">
+  <div class="section-header reveal">
+    <span class="section-label">How It Works</span>
+    <h2 class="section-title">Three simple steps</h2>
+  </div>
+  <div class="steps">
+    <div class="step reveal">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Describe your situation</h4>
+        <p>Tell EaseGov what government task you're trying to complete — in simple language, no jargon needed. Works in Hindi and English.</p>
+      </div>
+    </div>
+    <div class="step reveal reveal-delay-2">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>AI guides you step-by-step</h4>
+        <p>Our AI analyzes your situation, detects risks, and gives you a personalized action plan with form filling help and smart suggestions.</p>
+      </div>
+    </div>
+    <div class="step reveal reveal-delay-4">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Submit with confidence</h4>
+        <p>Error-check your application before sending. Track your status and get ongoing support until you get approved.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats-section">
+  <div class="stats-box reveal">
+    <div class="stat">
+      <div class="stat-num">50K+</div>
+      <div class="stat-label">Applications Processed</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-num">95%</div>
+      <div class="stat-label">Success Rate</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-num">24/7</div>
+      <div class="stat-label">AI Support Available</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">
+      <div class="logo-icon">E</div>
+      EaseGov
+    </div>
+    <div class="footer-tagline" style="margin-top:6px;">Empowering citizens. Simplifying governance.</div>
+    <div class="footer-tagline" style="margin-top:2px; font-size:.75rem;">Built for India · Secure · Reliable · Private</div>
+  </div>
+  <div style="text-align:center;">
+    <div class="footer-copy">Making government services accessible to everyone</div>
+    <div class="footer-copy" style="margin-top:4px;">© 2026 EaseGov. All rights reserved.</div>
+  </div>
+  <div class="protected-badge">🔒 Protected</div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

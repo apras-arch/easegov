@@ -77,7 +77,7 @@ function ChatbotPage() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="rounded-3xl border border-white/20 bg-white/10 p-6 shadow-2xl shadow-blue-950/20 backdrop-blur-md"
+        className="landing-panel p-6"
       >
         <h1 className="text-3xl font-bold text-white">EaseGov AI</h1>
         <p className="mt-2 text-lg text-slate-200">
@@ -90,7 +90,7 @@ function ChatbotPage() {
           initial={{ opacity: 0, x: -14 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.35, delay: 0.05 }}
-          className="space-y-3 rounded-3xl border border-white/20 bg-white/10 p-4 shadow-2xl shadow-blue-950/20 backdrop-blur-md"
+          className="landing-panel space-y-3 p-4"
         >
           <h2 className="text-lg font-semibold text-white">Saved keywords</h2>
           <button
@@ -127,10 +127,7 @@ function ChatbotPage() {
           className="space-y-4"
         >
           <ChatWindow messages={filteredMessages} loading={loading} />
-          <form
-            onSubmit={handleSend}
-            className="rounded-3xl border border-white/20 bg-white/10 p-4 shadow-2xl shadow-blue-950/20 backdrop-blur-md"
-          >
+          <form onSubmit={handleSend} className="landing-panel p-4">
             <div className="space-y-4">
               <textarea
                 value={query}
@@ -143,7 +140,7 @@ function ChatbotPage() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-500 px-5 py-3 text-lg font-semibold text-white shadow-lg shadow-indigo-900/40"
+                className="landing-button text-lg"
               >
                 {loading ? "Analyzing..." : "Send to AI"}
               </button>

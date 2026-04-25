@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # EaseGov
 
 EaseGov is a minimal fullstack app that helps users understand government processes with AI. It includes an AI chat assistant, a document simplifier, and a step-by-step guide generator.
@@ -111,3 +112,13 @@ Output:
 - Keep your API key private and never commit `.env`.
 - `OPENAI_MODEL` is configurable, so you can switch models without changing code.
 - AI responses are general guidance. Users should verify official requirements, fees, and appointment rules on the relevant government website.
+=======
+## 👨‍💻 Team Details
+- Team Name: Code Paradox 
+- Member 1: apras kushwah  
+- Member 2: hityesha choudhary
+- Member 3: deepak mangal
+- Member 4: rishika farkya
+---
+Team code : UDB-HSBJ
+>>>>>>> e80bc06683a38e22872accc2b8c40eeba865b76f

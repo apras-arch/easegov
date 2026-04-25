@@ -59,7 +59,7 @@ function JobsPage() {
         initial={{ opacity: 0, y: 16 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4 }}
-        className="rounded-3xl border border-white/20 bg-white/10 p-6 shadow-2xl shadow-blue-950/20 backdrop-blur-md"
+        className="landing-panel p-6"
       >
         <h1 className="text-3xl font-bold text-white">Government Jobs</h1>
         <p className="mt-2 text-lg text-slate-200">
@@ -73,7 +73,7 @@ function JobsPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.05 }}
-          className="rounded-3xl border border-white/20 bg-white/10 p-6 shadow-2xl shadow-blue-950/20 backdrop-blur-md"
+          className="landing-panel p-6"
         >
           <InputBox
             value={qualification}
@@ -85,7 +85,7 @@ function JobsPage() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-4 w-full rounded-2xl bg-gradient-to-r from-blue-600 to-indigo-500 px-5 py-3 text-lg font-semibold text-white shadow-lg shadow-indigo-900/40"
+            className="landing-button mt-4 text-lg"
           >
             {loading ? "Finding jobs..." : "Suggest jobs for me"}
           </button>
@@ -96,7 +96,7 @@ function JobsPage() {
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {sampleJobs.map((job) => (
-          <article key={job.title} className="rounded-3xl border border-white/20 bg-white/10 p-5 backdrop-blur-md">
+          <article key={job.title} className="landing-panel p-5">
             <h2 className="text-xl font-semibold text-white">{job.title}</h2>
             <p className="mt-2 text-base text-slate-200">{job.eligibility}</p>
             <a

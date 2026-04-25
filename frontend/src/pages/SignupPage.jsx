@@ -41,38 +41,5 @@ function SignupPage() {
             type="email"
             value={profile.email}
             onChange={(event) => updateField("email", event.target.value)}
-            placeholder="Email address"
+            // Profile/Signup page removed
             className="rounded-xl border border-slate-300 px-4 py-3 text-base"
-          />
-          <input
-            value={profile.phone}
-            onChange={(event) => updateField("phone", event.target.value)}
-            placeholder="Phone number"
-            className="rounded-xl border border-slate-300 px-4 py-3 text-base"
-          />
-          <input
-            value={profile.city}
-            onChange={(event) => updateField("city", event.target.value)}
-            placeholder="City"
-            className="rounded-xl border border-slate-300 px-4 py-3 text-base"
-          />
-        </div>
-
-        <button
-          type="submit"
-          className="mt-5 rounded-xl bg-slate-900 px-5 py-3 text-lg font-semibold text-white"
-        >
-          Save Profile
-        </button>
-
-        {saved && (
-          <p className="mt-4 rounded-xl bg-emerald-50 px-4 py-3 text-base font-semibold text-emerald-700">
-            Profile saved successfully.
-          </p>
-        )}
-      </form>
-    </section>
-  );
-}
-
-export default SignupPage;
