@@ -1,5 +1,5 @@
 ## 👨‍💻 Team Details
-- Team Name: Code Warriors  
+- Team Name: Code Paradox 
 - Member 1: apras kushwah  
 - Member 2: hityesha choudhary
 - Member 3: deepak mangal
